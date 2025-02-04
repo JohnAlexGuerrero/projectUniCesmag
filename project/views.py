@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.views.generic import CreateView
@@ -30,3 +30,8 @@ class ProjectUpdateView(UpdateView):
     template_name = "project/edit.html"
     form_class = ProjectForm
     success_url = reverse_lazy('list')
+
+def delete_project(request):
+    p = Project.objects.get(pk=request.POST.get('pk'))
+    p.delete()
+    return redirect('list')

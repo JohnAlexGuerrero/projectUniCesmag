@@ -7,4 +7,9 @@ project detail
 <p>{{ object.title }}</p>
 <p>{{ object.description }}</p>
 <a href="{% url "update" pk=object.id %}">Editar</a>
+<form method="post" action="{% url "delete" %}">
+    {% csrf_token %}
+    <input value="{{object.id}}" type="number"  name="pk">
+    <input type="submit" value="eliminar">
+</form>
 {% endblock content %}
