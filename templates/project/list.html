@@ -1,0 +1,14 @@
+{% extends "base/index.html" %}
+
+{% load static %}
+
+{% block content %}
+list projects
+
+{% for obj in object_list %}
+<a href="{{obj.get_absolute_url}}">
+    <p>{{ obj.title }}</p>
+</a>
+{% endfor %}
+
+{% endblock content %}

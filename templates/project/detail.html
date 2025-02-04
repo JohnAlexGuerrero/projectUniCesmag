@@ -1,0 +1,10 @@
+{% extends "base/index.html" %}
+
+{% load static %}
+
+{% block content %}
+project detail
+<p>{{ object.title }}</p>
+<p>{{ object.description }}</p>
+<a href="{% url "update" pk=object.id %}">Editar</a>
+{% endblock content %}
