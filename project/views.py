@@ -14,7 +14,12 @@ class ProjectCreateView(CreateView):
     model = Project
     template_name = "project/new.html"
     form_class = ProjectForm
-    success_url = reverse_lazy('list')
+    
+    def get_queryset(self):
+        return self.id
+    
+    def get_success_url(self):
+        return reverse_lazy('detail', kwargs={'pk': self.object.id})
     
 
 class ProjectListView(ListView):

@@ -2,14 +2,21 @@
 
 {% load static %}
 
+{% block side %}
+{% include "includes/sidebar.html" %}
+{% endblock side %}
+
 {% block content %}
-project detail
-<p>{{ object.title }}</p>
-<p>{{ object.description }}</p>
+<h1>
+    {{ object.title }}
+</h1>
+
+<p>{{ object.description|safe }}</p>
+
 <a href="{% url "update" pk=object.id %}">Editar</a>
 <form method="post" action="{% url "delete" %}">
     {% csrf_token %}
-    <input value="{{object.id}}" type="number"  name="pk">
+    <input value="{{object.id}}" type="number"  name="pk" style="display:none;">
     <input type="submit" value="eliminar">
 </form>
 {% endblock content %}

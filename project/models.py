@@ -1,11 +1,13 @@
 from django.db import models
 from django.urls import reverse
 
+from django_ckeditor_5.fields import CKEditor5Field
+
 # Create your models here.
 
 class Project(models.Model):
     title = models.CharField(("titulo"), max_length=150, unique=True, null=False)
-    description = models.TextField(("description"))
+    description = CKEditor5Field('descrición', config_name='extends')
 
     class Meta:
         verbose_name = ("Project")
