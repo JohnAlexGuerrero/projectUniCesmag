@@ -14,9 +14,18 @@
 <p>{{ object.description|safe }}</p>
 
 <a href="{% url "update" pk=object.id %}">Editar</a>
+
 <form method="post" action="{% url "delete" %}">
     {% csrf_token %}
     <input value="{{object.id}}" type="number"  name="pk" style="display:none;">
     <input type="submit" value="eliminar">
 </form>
+
+<div>
+    {% if object.images.first %}
+        {% include "upload/detail.html" with image=object.images.first %}
+    {% else %}
+    <a href="{% url "new_image" pk=object.id %}">Logo</a>
+    {% endif %}
+</div>
 {% endblock content %}
