@@ -1,0 +1,24 @@
+{% extends "base/index.html" %}
+
+{% load static %}
+
+{% block side %}
+{% include "includes/sidebar.html" %}
+{% endblock side %}
+
+{% block content %}
+new post
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {% for field in form %}
+    <div class="form-group">
+        <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input type="submit" value="Guardar">
+</form>
+{% endblock content %}

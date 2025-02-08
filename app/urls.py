@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('project/', include('project.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
+    path('project/', include('project.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

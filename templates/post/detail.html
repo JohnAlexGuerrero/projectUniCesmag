@@ -1,0 +1,19 @@
+{% extends "project/detail.html" %}
+
+{% load static %}
+
+{% block content %}
+detail post
+
+<p>{{ object.module }}</p>
+
+<h1>
+    {{ object.title }}
+</h1>
+
+
+<p>{{ object.content|safe }}</p>
+
+<a href="{% url "edit_post" pk=object.id %}">Editar</a>
+
+{% endblock content %}

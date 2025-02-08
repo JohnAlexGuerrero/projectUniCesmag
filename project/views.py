@@ -9,6 +9,8 @@ from django.views.generic import UpdateView
 from project.models import Project
 from project.forms import ProjectForm
 
+from post.models import Post, Module, ProjectPost
+
 # Create your views here.
 class ProjectCreateView(CreateView):
     model = Project
@@ -29,12 +31,29 @@ class ProjectListView(ListView):
 class ProjectDetailView(DetailView):
     model = Project
     template_name = "project/detail.html"
+    
+    def get_context_data(self, **kwargs) -> dict[str, object]:
+        context = super().get_context_data(**kwargs)
+        context['modules'] = [x[1] for x in Module.choices]
+        context["posts"] = ProjectPost.objects.filter(project__id=self.object.id)
+        return context
+    
 
 class ProjectUpdateView(UpdateView):
     model = Project
     template_name = "project/edit.html"
     form_class = ProjectForm
     success_url = reverse_lazy('list')
+
+class ProductPostDetailView(DetailView):
+    model = ProjectPost
+    template_name = "post/detail.html"
+    
+    def get_context_data(self, **kwargs) -> dict[str, object]:
+        context = super().get_context_data(**kwargs)
+        context['modules'] = [x[1] for x in Module.choices]
+        context["posts"] = ProjectPost.objects.filter(project__id=self.object.id)
+        return context
 
 def delete_project(request):
     p = Project.objects.get(pk=request.POST.get('pk'))
