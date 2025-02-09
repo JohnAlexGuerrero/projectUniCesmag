@@ -32,7 +32,7 @@ class Post(models.Model):
 
     
 class ProjectPost(models.Model):
-    project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
+    project = models.ForeignKey("project.Project", on_delete=models.CASCADE, related_name="posts")
     title = models.CharField(("titulo"), max_length=50)
     content = CKEditor5Field(("Contenido"), config_name="extends")
     module = models.CharField(("modulo"), max_length=50)

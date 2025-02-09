@@ -24,3 +24,12 @@ class PostUpdateView(UpdateView):
     
     def get_success_url(self):
         return redirect("detail_post", kwargs={'pk': self.object.id})
+
+    def get_context_data(self, **kwargs) -> dict[str, object]:
+        context = super().get_context_data(**kwargs)
+        context['modules'] = [x[0] for x in Module.choices]
+        context["posts"] = self.object.project.posts.all()
+        # print(self.object.project.posts.all())
+        print(context)
+        return context
+    

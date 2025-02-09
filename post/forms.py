@@ -10,6 +10,7 @@ class PostForm(forms.ModelForm):
         fields = ("title","content")
         
         widgets = {
+            "title": forms.TextInput(attrs={'class':"form-control"}),
             "content": CKEditor5Widget(
                 attrs={"class": "django_ckeditor_5"}, config_name="extends"
             )

@@ -44,7 +44,16 @@ class ProjectUpdateView(UpdateView):
     model = Project
     template_name = "project/edit.html"
     form_class = ProjectForm
-    success_url = reverse_lazy('list')
+    
+    def get_success_url(self):
+        return redirect('detail', kwargs={'pk': self.object.id})
+    
+    def get_context_data(self, **kwargs) -> dict[str, object]:
+        context = super().get_context_data(**kwargs)
+        context["modules"] = [x[0] for x in Module.choices]
+        context['posts'] = self.object.posts.all()
+        return context
+    
 
 class ProductPostDetailView(DetailView):
     model = ProjectPost
