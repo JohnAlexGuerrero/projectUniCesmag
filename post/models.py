@@ -8,7 +8,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 class Module(models.TextChoices):
     INTRODUCCIóN = 'Introducción'
     INSTALACIóN = 'Instalación'
-    INICION_RÁPIDO = 'Inicio Rápido'
+    INICIO_RÁPIDO = 'Inicio Rápido'
     FUNCIONALIDADES_PRINCIPALES = 'Funcionalidades Principales'
     CONFIGURACIÓN_AVANZADA = 'Configuración Avanzada'
     SOLUCIÓN_DE_PROBLEMAS = 'Solución de Problemas'
@@ -33,7 +33,6 @@ class Post(models.Model):
     
 class ProjectPost(models.Model):
     project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
-    # post = models.ForeignKey("post.Post", on_delete=models.CASCADE)
     title = models.CharField(("titulo"), max_length=50)
     content = CKEditor5Field(("Contenido"), config_name="extends")
     module = models.CharField(("modulo"), max_length=50)

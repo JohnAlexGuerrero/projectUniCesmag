@@ -5,9 +5,10 @@ from django.views.generic import CreateView
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.views.generic import UpdateView
+from django.views.generic import TemplateView
 
-from project.models import Project
-from project.forms import ProjectForm
+from project.models import Project, Categorization
+from project.forms import ProjectForm, CategorizationForm
 
 from post.models import Post, Module, ProjectPost
 
@@ -52,8 +53,24 @@ class ProductPostDetailView(DetailView):
     def get_context_data(self, **kwargs) -> dict[str, object]:
         context = super().get_context_data(**kwargs)
         context['modules'] = [x[1] for x in Module.choices]
-        context["posts"] = ProjectPost.objects.filter(project__id=self.object.id)
+        context["posts"] = ProjectPost.objects.filter(project__id=self.object.project.id)
         return context
+
+class CategorizationView(CreateView):
+    model = Categorization
+    template_name = "project/categorization.html"
+    form_class = CategorizationForm
+    
+    def get_success_url(self):
+        return redirect('detail', kwargs={'pk': self.kwargs['pk']})
+    
+    def get_context_data(self, **kwargs) -> dict[str, object]:
+        context = super().get_context_data(**kwargs)
+        context['modules'] = [x[1] for x in Module.choices]
+        context["posts"] = ProjectPost.objects.filter(project__id=self.kwargs['pk'])
+        context['object'] = Project.objects.get(pk=self.kwargs['pk'])
+        return context
+
 
 def delete_project(request):
     p = Project.objects.get(pk=request.POST.get('pk'))

@@ -25,17 +25,17 @@
                 {% endblock msg %}
             </div>
         </div>
-
+        
         <div class="row">
             <div class="col-4">
-                {% block side %}
-                {% endblock side %}
+                {% block side %}{% endblock side %}
             </div>
             <div class="col-8">
                 {% block content %}
                 {% endblock content %}
             </div>
         </div>
+        
     </div>
 
     <script src="{% static 'blog/js/jquery.js' %}"></script>

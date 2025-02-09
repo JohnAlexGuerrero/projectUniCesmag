@@ -1,0 +1,36 @@
+{% extends "base/index.html" %}
+
+{% load static %}
+
+{% block side %}
+    {% include "includes/menu.html" with pk=object.id %}
+    {% include "includes/sidebar.html" with objects=posts modules=modules %}
+{% endblock side %}
+
+{% block content %}
+
+<h1>Categorización de Software.</h1>
+
+<p>
+    La categorización de software es la clasificación de los programas informáticos según diferentes criterios, 
+    como su propósito, licencia, arquitectura o tecnología utilizada. Esta clasificación facilita su identificación, 
+    comparación y selección según las necesidades del usuario o desarrollador.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        {% if field.label != 'Project' %}
+            <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+            {{ field }}
+        {% else %}
+            <input type="number" value="{{object.id}}" name="project" style="display:none;">
+        {% endif %}
+    </div>
+    {% endfor %}
+    <input type="submit" value="Guardar">
+</form>
+
+
+{% endblock content %}
