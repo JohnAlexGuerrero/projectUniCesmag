@@ -3,10 +3,16 @@
     {% csrf_token %}
     {{ form.media }}
     {% for field in form %}
+
+    {% if field.label == 'User' %}
+        <input value="{{request.user.id}}" name="user" style="display:none;">
+    {% else %}
     <div class="form-group">
         <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
         {{ field }}
     </div>
+    {% endif %}
+
     {% endfor %}
-    <input type="submit" value="Guardar">
+    <input type="submit" value="Guardar" class="btn bg-primary-subtle p-2 mt-3">
 </form>

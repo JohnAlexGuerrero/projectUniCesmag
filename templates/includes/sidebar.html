@@ -1,8 +1,8 @@
 <h1><strong>Indice</strong></h1>
 
-<ul>
+<ol class="list-group list-group-numbered">
     {% for module in modules %}
-        <li>1. {{ module }}</li>
+        <li class="list-group-item bg-primary-subtle"><strong>{{ module }}</strong></li>
         
         {% for obj in objects %}
             <ul>
@@ -15,5 +15,5 @@
         {% endfor %}
     {% endfor %}
 
-</ul>
+</ol>
     
