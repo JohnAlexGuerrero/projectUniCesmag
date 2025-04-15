@@ -1,38 +1,199 @@
-{% extends "base/index.html" %}
+{% extends "base/base.html" %}
 
 {% load static %}
+{% load humanize %}
 
-{% block side %}
-    {% include "includes/menu.html" with pk=object.id %}
-    {% include "includes/sidebar.html" with objects=posts modules=modules %}
-{% endblock side %}
+{% block sidebar %}
+
+<div class="container">
+    <h2>Mi Application</h2>
+  
+    <div class="d-flex flex-column">
+      <button type="button" class="btn" >Inicio</button>
+      <button type="button" class="btn">Mi unidad</button>
+      <span>Participantes</span>
+      <button type="button" class="btn border-0" hx-get="{% url 'organizations' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">organizaciones</button>
+      <button type="button" class="btn border-0" hx-get="{% url 'participants' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">personas</button>
+      <span>Requisitos</span>
+      <button type="button" class="btn" hx-get="{% url 'requeriments' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Requisitos de sistema</button>
+      <button type="button" class="btn" hx-get="{% url 'objectives' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Objetivos del sistema</button>
+      <button type="button" class="btn border-0" hx-get="{% url "list_image" pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Imagenes</button>
+      <button type="button" class="btn border-0" hx-get="{% url "delete_project" pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Eliminar proyecto</button>
+    </div>
+</div>
+{% endblock sidebar %}
 
 {% block content %}
-
-    <h1>
-        {{ object.title }}
-    </h1>
-
-    <p>{{ object.description|safe }}</p>
-
-    <p><strong>Version: </strong>{{ object.version }}</p>
-
-    <a href="{% url "update" pk=object.id %}">Editar</a>
-
-    <form method="post" action="{% url "delete" %}">
-        {% csrf_token %}
-        <input value="{{object.id}}" type="number"  name="pk" style="display:none;">
-        <input type="submit" value="eliminar">
-    </form>
-
-    <div>
-        {% if object.images.first %}
-            {% include "upload/detail.html" with image=object.images.first %}
-        {% else %}
-        <a href="{% url "new_image" pk=object.id %}">Logo</a>
-        {% endif %}
-    </div>
     
+<figure>
+    <blockquote class="blockquote">
+        <h2>¡Bienvenidos a <strong> {{object.name}}! </strong></h2>
+    </blockquote>
+    <cite title="Source Title">{{ object.title }}.</cite>
+</figure>
+
+<!-- Example single danger button -->
+<div class="btn-group">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Nuevo
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <button hx-trigger="click" hx-get="{% url "new_organization" %}" hx-target="#root" hx-swap="outerHTML" class="btn primary"
+            data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm">
+                Organización
+            </button>
+        </li>
+        <li>
+            <button hx-get="{% url "new_participant" %}" hx-trigger="click"
+                data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                hx-swap="outerHTML" class="btn primary"
+                hx-target="#root">
+                Participantes
+            </button>
+        </li>
+        <li>
+            <button hx-get="{% url "new_objective" pk=object.id %}" hx-trigger="click"
+                hx-swap="outerHTML" class="btn primary"
+                hx-target="#root">
+                Objetivo
+            </button>
+        </li>
+        <li>
+            <button hx-get="{% url "new_requeriment" pk=object.id %}" hx-trigger="click"
+                hx-swap="outerHTML" class="btn primary"
+                hx-target="#root">
+                Requisito
+            </button>
+        </li>
+        <li>
+            <button hx-get="{% url "new_image" pk=object.id %}" hx-trigger="click"
+                hx-swap="outerHTML" class="btn primary"
+                hx-target="#root">
+                Subir imagen
+            </button>
+        </li>
+    </ul>
+</div>
+
+<p class="d-inline-flex gap-1">
+    <button type="button" class="btn border">Tipo</button>
+    <button type="button" class="btn border">Codigo fuente</button>
+    <button type="button" class="btn border">plantillas</button>
+</p>
+
+
+
+
+<div class="offcanvas offcanvas-end w-75" tabindex="-1" id="modalForm" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div id="root"></div>
+    ...
+    </div>
+</div>
+
+<div id="main">
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex">
+                    <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">1</p>
+                    <p class="mx-3">Datos Generales:</p>
+                    <div>
+                        <span>Título de software <input type="checkbox" checked="True"></span>
+                    </div>
+                </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">2</p>
+                <p class="mx-3">Participantes:</p>
+                <div class="flex-column">
+                    <p>Organizaciones <input type="checkbox"></p>
+                    <p>Personas <input type="checkbox"></p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">3</p>
+                <p class="mx-3">Logo de software <input type="checkbox"></p>
+
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">4</p>
+                <p class="mx-3">Descripción del sistema <input type="checkbox"></p>
+                <div class="flex-column">
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">5</p>
+                <p class="mx-3">Objetivos del sistema <input type="checkbox"></p>
+                <div class="flex-column">
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">6</p>
+                <p class="mx-3">Catalogo de requisitos</p>
+                <div class="flex-column">
+                    <p>6.1 Requisitos de información <input type="checkbox"></p>
+                    <p>6.2 Requisitos funcionales <input type="checkbox"></p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">7</p>
+                <p class="mx-3">Diagramas</p>
+                <div class="flex-column">
+                    <p>7.1 Casos de usos<input type="checkbox"></p>
+                    <span>7.2 Entidad - Relación (Diseño Base de Datos)<input type="checkbox" ></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">8</p>
+                <p class="mx-3">Interfaz de software <input type="checkbox"></p>
+                <div class="flex-column">
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">9</p>
+                <p class="mx-3">Instalación y despliegue</p>
+                <div class="flex-column">
+                    <p>9.1 Configuraciones de entorno <input type="checkbox"></p>
+                    <p>9.2 Hardware <input type="checkbox"></p>
+                    <p>9.3 Software <input type="checkbox"></p>
+                    <p>9.4 Configuraciones de proyecto <input type="checkbox"></p>
+                    <p>9.5 Configuraciones de bases de datos <input type="checkbox"></p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">10</p>
+                <p class="mx-3">Información de software</p>
+                <div class="flex-column">
+                    <p>10.1 Robustez <input type="checkbox"></p>
+                    <p>10.2 Extensibilidad <input type="checkbox"></p>
+                    <p>10.3 Desempeño <input type="checkbox"></p>
+                    <p>10.4 Usabilidad <input type="checkbox"></p>
+                    <p>10.5 Integridad <input type="checkbox"></p>
+                    <p>10.6 Compatibilidad <input type="checkbox"></p>
+                    <p>10.7 Mantenimiento <input type="checkbox"></p>
+                    <p>10.8 Documentación <input type="checkbox"></p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">11</p>
+                <p class="mx-3">Ejecutable de software <input type="checkbox"></p>
+                <div class="flex-column">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    
+
 {% endblock content %}
 
 
