@@ -1,0 +1,12 @@
+<ol class="list-group list-group-numbered">
+<li class="list-group-item border-0"><strong>Funcionalidades</strong></li>
+        
+    {% for obj in object.features.all %}
+        <ul>
+            <li>
+                <a href="{% url "detail_feature" pk=obj.id %}"> {{ obj }} </a>
+            </li>
+        </ul>
+    {% endfor %}
+
+</ol>

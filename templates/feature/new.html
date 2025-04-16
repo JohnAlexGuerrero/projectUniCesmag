@@ -1,0 +1,60 @@
+{% extends "project/detail.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block side %}
+    {% include "feature/list.html" with object=object %}
+{% endblock side %}
+
+{% block subcontent %}
+<p>Requisitos funcionales</p>
+
+<p>Los requisitos funcionales de un software, definen el proposito y las acciones que se llevan acabo en un sistema.</p>
+<h3>
+    Guía para definir un requisito funcional:
+</h3>
+<p>
+    <ul>
+        <li>
+            Describen las acciones o tareas específicas que el sistema debe realizar.
+            (Ejemplo: "El sistema debe permitir a los usuarios crear cuentas", "El sistema debe generar informes de ventas")
+        </li>
+        <li>
+            Incluir instrucciones detalladas(pasos para realizar ciertas acciones).
+        </li>
+        <li>
+            Agregar capturas de pantalla: Mejora la experiencia del usuario con soporte visual.
+        </li>
+        <li>
+            Explicación de los menus, botones y herramientas disponibles.
+        </li>
+        <li>
+            Incluir instrucciones detalladas: Proporcionar pasos para utilizar cada función correctamente.
+        </li>
+        <li>
+            Mensiona las configuraciones adicionales presentes en las capturas.
+        </li>
+        Mencionar opciones de personalización o ajustes avanzados si aplican.
+    </ul>
+</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>
+                Titulo de la pantalla.
+            </p>
+            
+            <input type="number" name="project" value="{{ object.id }}" style="display:none;">
+            <input type="text" name="title" class="form-control p-1 mb-2">
+ 
+            {{ form.media }}
+            {{ form.content }}
+            <input type="submit" value="Guardar" class="btn bg-primary-subtle p-2 mt-3">
+        </form>
+    </div>
+</div>
+
+{% endblock subcontent %}

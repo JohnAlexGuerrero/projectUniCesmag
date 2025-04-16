@@ -1,0 +1,143 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+    
+    <figure>
+        <blockquote class="blockquote">
+            <h2><strong>¡Hola {{request.user}}! </strong></h2>
+            <h2><strong>Te damos la bienvenida a miApp </strong></h2>
+        </blockquote>
+        <cite title="Source Title">Crea documentación de software, mejora la calidad y los tiempos de desarrollo.</cite>
+    </figure>
+
+    <div class="container" style="width: 100%; height:100px;">
+        <div class="container mt-4">
+            
+            <div class="offcanvas offcanvas-end w-75" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header mt-5 mx-5">
+                    <h5 class="offcanvas-title h2" id="offcanvasRightLabel">Crea un proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="m-5">
+                        <form id="miFormulario" method="post" action="{% url "new" %}">
+                            {% csrf_token %}
+                            <input type="number" name="user" style="display:none;" value="{{ request.user.id }}">
+
+                            <div class="form-group" id="form-group-1">
+                                <h2 class="">
+                                    Empecemos con el <strong style="color: rgb(89, 89, 228);">Nombre</strong> del software.
+                                </h2>
+                                <p>crearemos un contenedor para tu proyecto, donde podras guardar toda la información relevante de tu Software.</p>
+                                {{ form.name }}
+                                <small class="title" id="id_name_help">Máximo de caracteres 0/20</small>
+                                <div class="mt-5 items-content-right">
+                                    <input type="button" id="id_name_button" value="continuar" class="btn btn-primary p-4" style="width: 200px; height:auto;">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="form-group-2" style="display: none;">
+                                <h2 class="d-flex">
+                                    Explica el significado de <strong style="color: rgb(89, 89, 228);" ><p id="id_project"></p></strong>
+                                </h2>
+                                <p> Si tu nombre de software, es la abrevación de distintas palabras.</p>
+                                {{ form.title }}
+                                <small class="title" id="id_title_help">Máximo de caracteres 0/150</small>
+                                <div class="mt-5 items-content-right">
+                                    <input type="submit" id="submit" value="crear proyecto" class="btn btn-primary p-4" style="width: 200px; height:auto;">
+                                </div>
+                            </div>
+                        </form>
+                        
+                        {% include "includes/loader.html" %}
+                    </div>
+                </div>
+            </div>
+    
+            <div class="d-flex justify-content-center">
+    
+                {% if objects %}
+                    {% include "project/list.html" with objects=objects %}
+                {% else %}
+                    <div class="flex-column">
+                        <h3>No hay proyectos creados.</h3>
+                        <p title="Source Title">
+                            Comienza con la creación de un proyecto en miapp
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+    
+        </div>
+
+    </div>
+
+    
+
+    
+
+    <script>
+        var buttonName = document.getElementById('id_name_button')
+        var submitBtn = document.getElementById('submit')
+        var loader = document.getElementById('loader')
+        var mesanje = document.getElementById('mensaje')
+        var nameEl = document.getElementById("id_name")
+        var titleEl = document.getElementById('id_title')
+        var projectEl = document.getElementById('id_project')
+
+        loader.style.display = 'none';
+
+        buttonName.disabled = true
+
+        var countCharacters = (element)=>{
+            let textHelpEl = document.getElementById(`${element.id}_help`)
+            if(element.value.length > element.maxLenght){
+
+            }else{
+                textHelpEl.textContent = `Máximo de caracteres ${element.maxLength - element.value.length}/${element.maxLength}`
+            }
+        }
+
+        nameEl.addEventListener('input', (e)=>{
+            countCharacters(e.target)
+            
+            if(e.target.value.length > 0){
+                buttonName.disabled = false;
+                projectEl.textContent = `${e.target.value}`;
+            }else{
+                buttonName.disabled = true;
+            }
+        })
+
+        submitBtn.addEventListener('click', ()=>{
+            document.getElementById('miFormulario').style.display = 'none';
+
+            loader.style.display = 'block';
+            mensaje.style.display = 'block';
+            
+            setTimeout(function() {
+                mensaje.textContent = `Formulario enviado con éxito.`;
+        
+                // Oculta el mensaje después de unos segundos
+                setTimeout(function() {
+                    mensaje.style.display = 'none';
+                }, 6000);
+            }, 10000); // Simula 2 segundos de espera
+        })
+
+        titleEl.addEventListener('input', (e)=>{
+            countCharacters(e.target)
+        })
+
+        buttonName.addEventListener('click', ()=>{
+            document.getElementById('form-group-1').style.display = "none";
+            document.getElementById('form-group-2').style.display = "block";
+        })
+        
+        
+    </script>
+    {% endblock content %}

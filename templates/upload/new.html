@@ -1,50 +1,275 @@
-{% extends "base/index.html" %}
-
-{% load static %}
-
-{% block side %}
-
-{% include "includes/sidebar.html" %}
-
-{% endblock side %}
-
-{% block content %}
-
-<h1 class="h2 fw-bold text-center mt-3">Paso 2:</h1>
-<p class="text-secondary text-center">Define la identidad visual(logo) de tu aplicativo.</p>
-<label for=""  class="h4 form-label mb-3 fw-bold text-secondary">¿cuenta con un LOGO?</label>
-
-<form method='POST' enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="number" value="{{ object.id }}" style="display:none;" name="project">
+<style>
+    .uploadContainer {
+        border-radius: 10px;
+        /* box-shadow: 4px 4px 30px rgba(0, 0, 0, .2); */
+        /* display: flex;
+        flex-direction: column;
+        align-items: center; */
+        /* justify-content: space-between; */
+        position: relative;
+        padding: 10px;
+        gap: 5px;
+        background-color: rgb(214, 182, 182);
+      }
+      
+      .header {
+        flex: 1;
+        width: 100%;
+        border: 2px dashed royalblue;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      
+      .header svg {
+        height: 100px;
+      }
+      
+      .header p {
+        text-align: center;
+        color: black;
+      }
+      
+      .footer {
+        
+        width: 100%;
+        height: 40px;
+        padding: 8px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: black;
+        border: none;
+      }
+      
+      .footer svg {
+        height: 130%;
+        fill: royalblue;
+        background-color: rgba(70, 66, 66, 0.103);
+        border-radius: 50%;
+        padding: 2px;
+        cursor: pointer;
+        box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+      }
+      
+      .footer p {
+        flex: 1;
+        text-align: center;
+      }
     
-    <input type="text" value="logo#{{object.id}}" name="title" style="display:none;">
+    .upload {
+        width: 100%;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    {% if logo %}
-        <img 
-            src={% static "images/upload_icon.png" %}  
-            alt={{software.title}}  
-            id="id_img"
-        >
-        <div class="container-upload"> 
-            <div class="header">
-            </div> 
-            <div class="d-flex justify-content-between p-1">
-                <label for="id_logo" class="footer"> 
-                    <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path><path d="M18.153 6h-.009v5.342H23.5v-.002z"></path></g></svg> 
-                    <p id="id_text_file">{% if logo %} {{software.title}} {% else %} Aun no existe un LOGO {% endif %}</p> 
-                </label>
+    .switch {
+    --button-width: 3.5em;
+    --button-height: 2em;
+    --toggle-diameter: 1.5em;
+    --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
+    --toggle-shadow-offset: 10px;
+    --toggle-wider: 3em;
+    --color-grey: #cccccc;
+    --color-green: #4296f4;
+    }
+
+    .slider {
+    display: inline-block;
+    width: var(--button-width);
+    height: var(--button-height);
+    background-color: var(--color-grey);
+    border-radius: calc(var(--button-height) / 2);
+    position: relative;
+    transition: 0.3s all ease-in-out;
+    }
+
+    .slider::after {
+        content: "";
+        display: inline-block;
+        width: var(--toggle-diameter);
+        height: var(--toggle-diameter);
+        background-color: #fff;
+        border-radius: calc(var(--toggle-diameter) / 2);
+        position: absolute;
+        top: var(--button-toggle-offset);
+        transform: translateX(var(--button-toggle-offset));
+        box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+        transition: 0.3s all ease-in-out;
+    }
+
+    .switch input[type="checkbox"]:checked + .slider {
+        background-color: var(--color-green);
+    }
+
+    .switch input[type="checkbox"]:checked + .slider::after {
+        transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+        box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+    }
+
+    .switch input[type="checkbox"] {
+        display: none;
+    }
+
+    .switch input[type="checkbox"]:active + .slider::after {
+        width: var(--toggle-wider);
+    }
+
+    .switch input[type="checkbox"]:checked:active + .slider::after {
+        transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)));
+    }
+
+    .upload{
+        width: 100%;
+        height: 200px;
+        border: 2px dotted gray;
+        border-radius: 5px;
+        margin-top: 9px;
+ 
+    }
+
+    .upload label{
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .upload svg{
+        color: rgb(87, 85, 85);
+    }
+
+    .upload:hover{
+        border: 2px dotted black;
+    }
+
+
+    .upload div{
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        background-color: rgb(194, 189, 189);;
+        display: flex;
+        justify-content: center;
+        padding: 1px;
+    }
+
+</style>
+
+<div id="root">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title h2" id="offcanvasRightLabel">Subir imagen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="card">
+            <div class="card-body">
+                <div class="container p-4">
+                    <form hx-post="{% url "new_image" pk=object.id %}" enctype="multipart/form-data" hx-target="this" hx-swap="outerHTML">
+                        {% csrf_token %}
+                        <label for="" class="mb-1">Titulo de la imagen</label>
+                        <input id="id_title" type="text" name="title" class="border form-control"> 
+                        <div class="upload">
+                            <label for="id_image">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5m-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5"/>
+                                    </svg>
+                                </div>
+                                <img 
+                                    src="photo.png"  
+                                    alt=""  
+                                    id="id_img"
+                                >
+                                Haz click para seleccionar una imagen
+                                <p style="color: rgb(175, 175, 175);">PNG, JPG, GIF, hasta 10MB</p>
+                            </label>
+                        </div>
+                        <label class="switch mt-2">
+                            <input type="checkbox" name="is_logo">
+                            <span class="slider"></span>
+                            <span class="">Esta imagen corresponde al LOGO del software</span>
+                        </label>
+                        <input id="id_project" type="text" name="project" style="display: none;" value="{{object.id}}"> 
+                        <input id="id_image" type="file" name="image" accept="image/*" style="display: none;"> 
+                        <div class="d-flex justify-content-between ">
+                            <input type="submit" class="btn border p-2 mt-3 btn-primary" value="Subir imagen">
+                            <button type="button" id="id_delete" class="btn d-flex mt-3 btn-sm align-items-center"  disabled="true">
+                                <svg viewBox="0 0 24 24" fill="none" width="16" heigth="16" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z" stroke="#000000" stroke-width="2"></path> <path d="M19.5 5H4.5" stroke="#000000" stroke-width="2" stroke-linecap="round"></path> <path d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z" stroke="#000000" stroke-width="2"></path> </g></svg>
+                                Descartar
+                            </button>
+                        </div>
+                    
+                    </form>
+                </div>
 
             </div>
-            <input id="id_logo" type="file" name="logo" accept="image/*" style="display: none;"> 
+    
         </div>
-    {% else %}
-    {{ form.image }}
-    {% endif %} 
-    <div class="d-flex justify-content-between ">
-        <input type="submit" class="btn btn-dark mt-3" value="Guardar">
-        <input type="button" value="Cancelar">
-    </div>
-</form>
 
-{% endblock content %}
+    </div>
+</div>
+
+
+<script>
+    var titleEl = document.getElementById('id_title')
+    var imageEl = document.getElementById('id_image')
+    const img = document.querySelector('#id_img')
+    const textFile = document.querySelector("#id_text_file")
+    const deleteBtn= document.querySelector("#id_delete")
+
+    imageEl.addEventListener('change', e=> selectedFile(img, titleEl, e))
+
+    deleteBtn.addEventListener('click', e=> deleteFile(img, e))
+
+    const resizeImageToFitContainer = (img, container) => {
+        const originalWidth = img.naturalWidth;
+        const originalHeight = img.naturalHeight;
+
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+
+        
+        const widthRatio = containerWidth / originalWidth;
+        const heightRatio = containerHeight / originalHeight;
+        
+        const scale = Math.min(widthRatio, heightRatio);
+
+        const newWidth = originalWidth * scale;
+        const newHeight = originalHeight * scale;
+
+        img.style.width = `${newWidth}px`;
+        img.style.height = `${newHeight}px`;
+        container.style.height = `${newHeight + 100}px`;
+    }
+
+    const selectedFile = (imgEl, helpText, env) =>{
+        helpText.value = env.target.files[0].name
+        
+        if(env.target.files[0]){
+            deleteBtn.disabled = false;
+            
+            const reader = new FileReader()
+            reader.onload = (env)=>{
+                imgEl.src = env.target.result
+            }
+            reader.readAsDataURL(env.target.files[0])
+        }
+    }
+
+    
+    const deleteFile = (imgEl, helpText)=>{
+        imgEl.src = ''
+        helpText.textContent = "No hay un archivo"
+
+    }
+    
+
+</script>

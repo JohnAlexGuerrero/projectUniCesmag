@@ -10,14 +10,14 @@
   
     <div class="d-flex flex-column">
       <button type="button" class="btn" >Inicio</button>
-      <button type="button" class="btn">Mi unidad</button>
+      <a type="button" class="btn" href="{% url "detail" pk=object.id %}">Dashboard</a>
       <span>Participantes</span>
-      <button type="button" class="btn border-0" hx-get="{% url 'organizations' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">organizaciones</button>
+      <button type="button" class="btn border-0" hx-get="{% url 'organizations' pk=object.id %}" hx-target="#main" hx-swap="outerHTML">organizaciones</button>
       <button type="button" class="btn border-0" hx-get="{% url 'participants' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">personas</button>
       <span>Requisitos</span>
       <button type="button" class="btn" hx-get="{% url 'requeriments' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Requisitos de sistema</button>
       <button type="button" class="btn" hx-get="{% url 'objectives' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Objetivos del sistema</button>
-      <button type="button" class="btn border-0" hx-get="{% url "list_image" pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Imagenes</button>
+      <button type="button" class="btn border-0" hx-get="{% url "list_image" pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Imagenes</button>
       <button type="button" class="btn border-0" hx-get="{% url "delete_project" pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Eliminar proyecto</button>
     </div>
 </div>
@@ -69,6 +69,7 @@
         <li>
             <button hx-get="{% url "new_image" pk=object.id %}" hx-trigger="click"
                 hx-swap="outerHTML" class="btn primary"
+                data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
                 hx-target="#root">
                 Subir imagen
             </button>
@@ -86,14 +87,7 @@
 
 
 <div class="offcanvas offcanvas-end w-75" tabindex="-1" id="modalForm" aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div id="root"></div>
-    ...
-    </div>
+    <div id="root"></div>
 </div>
 
 <div id="main">
@@ -111,13 +105,35 @@
                 <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">2</p>
                 <p class="mx-3">Participantes:</p>
                 <div class="flex-column">
-                    <p>Organizaciones <input type="checkbox"></p>
-                    <p>Personas <input type="checkbox"></p>
+                    <p>Organizaciones <input type="checkbox"
+                        {% if object.organizations %}checked="true">
+                        <span  data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                            hx-get="{% url "organizations" pk=object.id %}" hx-target="#root" hx-swap="outerHTML"
+                            style="cursor:pointer;"
+                        >ver</span>{% else %}""{% endif %}
+                        </p>
+                    <p>Personas <input type="checkbox" data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                        {% if object.participants %}checked="true"><span  data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                        hx-get="{% url "participants" pk=object.id %}" hx-target="#root" hx-swap="outerHTML"
+                        style="cursor:pointer;"
+                    >ver</span>{% else %} {% endif %}
+                        </p>
                 </div>
             </div>
             <div class="d-flex">
                 <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">3</p>
-                <p class="mx-3">Logo de software <input type="checkbox"></p>
+                <p class="mx-3">Logo de software 
+                    <input type="checkbox"
+                        {% for img in object.images.all %}
+                            {% if img.is_logo %}
+                                checked="true">
+                                <span style="cursor:pointer" hx-get="{% url "detail_image" pk=img.id %}" hx-target="#root" hx-swap="outerHTML"
+                                data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                                >ver</span>
+                            {% endif %}
+                            >
+                        {% endfor %}
+                </p>
 
             </div>
             <div class="d-flex">

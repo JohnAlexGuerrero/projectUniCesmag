@@ -1,0 +1,27 @@
+<div id="root">
+  <h3>
+    <strong>Objetivos del sistema </strong>
+  </h3>
+    
+    <p>
+        Presentamos a las organizaciones y participantes clave en el desarrollo de <strong>{{ project.name.upper }}</strong>. 
+    </p>
+    
+    {% if object_list %}
+      {% for obj in object_list %}
+        {{obj.title}}
+        {{obj.version}}
+        {{obj.authors}}
+        {{obj.fuente}}
+        {{obj.description}}
+        {{obj.importancia}}
+        {{obj.urgencia}}
+        {{obj.status}}
+        {{obj.estabilidad}}
+        {{obj.comments}}
+      {% endfor %}
+        
+    {% endif %}
+</div>
+
+

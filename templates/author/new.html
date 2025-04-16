@@ -1,0 +1,19 @@
+<div class="offcanvas-header">
+    <div class="offcanvas-header mt-5 mx-5">
+        <h5 class="offcanvas-title h2" id="offcanvasRightLabel">Agregar participante</h5>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <div class="container p-2">
+        <p>Las personas participantes son, aquellas personas que hacen  desarrollo de un proyecto prque permite optimizar recursos, definir roles y responsabilidades.</p>
+        <form hx-post="{% url "new_participant" %}" hx-target="this" hx-swap="outerHTML">
+            {% csrf_token %}
+            {% for field in form %}
+                <label>{{ field.label_tag }}</label>
+                {{ field }}
+            {% endfor %}
+            <input type="submit" value="Crear" class="btn btn-primary border p-2 mt-2">
+        </form>
+    </div>
+</div>

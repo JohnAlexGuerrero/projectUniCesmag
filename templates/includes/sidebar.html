@@ -1,19 +1,20 @@
-<h1><strong>Indice</strong></h1>
 
-<ol class="list-group list-group-numbered">
-    {% for module in modules %}
-        <li class="list-group-item bg-primary-subtle"><strong>{{ module }}</strong></li>
-        
-        {% for obj in objects %}
-            <ul>
-                {% if module == obj.module %}
-                    <li>
-                        <a href="{% url "detail_post" pk=obj.id %}"> {{ obj }} </a>
-                    </li>
-                {% endif %}
-            </ul>
-        {% endfor %}
-    {% endfor %}
+<div class="container">
+  <h2>Mi Application</h2>
 
-</ol>
+  <div class="d-flex flex-column">
+    <button type="button" class="btn" >Inicio</button>
+    <button type="button" class="btn">Mi unidad</button>
+    <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Nuevo proyecto</button>
+    <button type="button" class="btn">Participantes</button>
+    <button type="button" class="btn">Reciente</button>
+    <button type="button" class="btn">Papelera</button>
+  </div>
+  
+
+
+</div>
+
+
+
     

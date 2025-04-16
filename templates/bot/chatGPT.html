@@ -1,0 +1,70 @@
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Escribe con IA</button>
+
+<div class="offcanvas offcanvas-end h-100" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">{{title}}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="resultText" style="width:100%; height:300px; overflow:scroll;">
+      <p class="text-left border p-2 rounded-pill w-75">Definir el objetivo principal</p>
+      <p class="text-left border p-2 rounded-pill w-75">Describir las funciones clave</p>
+      <p class="text-left border p-2 rounded-pill w-75">Identificar a los usuarios objetivo</p>
+      <p class="text-left border p-2 rounded-pill w-75">Incluir ventajas destacadas</p>
+    </div>
+
+    <div class="p-1 shadow border">
+      {% include "includes/menu.html" %}
+      <textarea name="" id="chatText" class="form-control border-0" style=" background-color: rgb(243, 237, 237);" cols="4" rows="5"></textarea>
+      <input type="button" id="chatBtn" value="Crear" class="btn btn-outline-dark rounded-pill m-2" style="width: 100px; height:auto;">
+    </div>
+  </div>
+</div>
+
+<script>
+  var chatText = document.querySelector('#chatText')
+  var chatBtn = document.querySelector('#chatBtn')
+  var chatResult = document.querySelector('#resultText')
+
+  console.log(" chatGPT...");
+
+  chatBtn.addEventListener('click', async(e)=>{
+    let content = {
+      body: chatText.value
+    }
+    
+    let response = await fetch('http://127.0.0.1:8000/chatbot/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(content)
+    });
+    
+    let result = await response.json();
+    //alert(result.message);
+    chatResult.innerHTML = `
+    <p>
+      ${result.message}
+    </p>
+    `
+
+  })
+
+  let textContent = chatResult.innerHTML;
+
+  console.log("object menu...");
+    
+    const copyContent = async () => {
+      try {
+        await navigator.clipboard.writeText(textContent);
+        console.log('Contenido copiado al portapapeles');
+      } catch (err) {
+        console.error('Error al copiar: ', err);
+      }
+    }
+
+    const deleteContent = ()=>{
+        textContent.innerHTML = ``
+    }
+</script>

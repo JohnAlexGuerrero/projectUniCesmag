@@ -1,0 +1,21 @@
+{% extends "base/index.html" %}
+
+{% load static %}
+
+{% block side %}
+    {% include "includes/sidebar.html" with objects=posts modules=modules %}
+{% endblock side %}
+
+
+{% block content %}
+<h3>Editar {{ object.title }}</h3>
+
+{% include "includes/form.html" with form=form %}
+
+<form method="post" action="{% url "bot_write" %}">
+    {% csrf_token %}
+    <input value="{{ object.id }}" name="pk">
+    <input type="submit" class="btn btn-primary" value="Escribe con AI">
+</form>
+
+{% endblock content %}

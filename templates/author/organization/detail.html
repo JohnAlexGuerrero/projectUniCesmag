@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="card-body mt-2 p-3" hx-target="this" hx-swap="outerHTML">
+
+    <div class="w-75">
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">ORG-001</span>
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">Organización</span>
+            <input type="text" value="{{ object.name }}" class="form-control" disabled> 
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">Descripción</span>
+            <input type="text" value="{{ object.description }}" class="form-control" disabled> 
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">Dirección</span>
+            <input type="text" value="{{ object.address }}" class="form-control" disabled> 
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">Télefono</span>
+            <input type="text" value="{{ object.phone }}" class="form-control" disabled> 
+        </div>
+        <div class="input-group mb-2">
+            <span class="input-group-text w-25">E-mail</span>
+            <input type="text" value="{{ object.email }}" class="form-control" disabled> 
+        </div>
+
+        <button hx-get="{% url "edit_organization" pk=object.id %}" class="btn p-2 border">
+            Click To Edit
+        </button>
+
+        <form method="post" action="{% url 'delete_organization' %}">
+            {% csrf_token %}
+            <input type="number" value="{{object.id}}" style="display:none;" name="pk">
+
+            <input type="submit" class="btn p-2 border" value="Delete">
+        </form>
+    </div>
+</div>

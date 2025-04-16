@@ -1,0 +1,86 @@
+{% extends "project/detail.html" %}
+
+{% load static %}
+
+{% block subcontent %}
+<h3>Organizaciones y participantes</h3>
+
+<div class="container mt-3">
+    <div class="card shadow">
+        <div class="card-body">
+            <h4>
+                <strong>
+                    Team Members
+                </strong>
+            </h4>
+            <ul>
+                <li class="p-2">
+                    <div class="d-flex items-content-center">
+                        <div style="width: 52px; height:52px; border-radius:100%;" class="border bg-light"></div>
+                        <div class="flex-column mx-3">
+                            <strong>Arlene McCoy</strong>
+                            <div class="border p-1" style="border-radius: 52px;">
+                                <p class="text-center m-0">UI Designer</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <hr>
+                <li class="p-2">
+                    <div class="d-flex items-content-center">
+                        <div style="width: 52px; height:52px; border-radius:100%;" class="border bg-light"></div>
+                        <div class="flex-column mx-3">
+                            <strong>Arlene McCoy</strong>
+                            <div class="border p-1 mt-1" style="border-radius: 52px;">
+                                <p class="text-center m-0">UI Designer</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <hr>
+                <li class="p-2">
+                    <div class="d-flex items-content-center">
+                        <div style="width: 52px; height:52px; border-radius:100%;" class="border bg-light"></div>
+                        <div class="flex-column mx-3">
+                            <strong>Annette Black</strong>
+                            <div class="d-flex">
+                                <div class="border p-2 mt-1 mx-1" style="border-radius: 52px;">
+                                    <p class="text-center m-0">UI Designer</p>
+                                </div>
+                                <div class="border p-2" style="border-radius: 52px;">
+                                    <p class="text-center m-0">Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <hr>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="card" style="height: 400px;">
+        <div class="d-flex justify-content-end p-2">
+            <button class="btn bg-light border" style="width: 200px;">Agregar miembro</button>
+        </div>
+        <div class="card-body">
+            <table class="table border-0">
+                <thead>
+                    <th>Organizacion</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Télefono</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock subcontent %}
