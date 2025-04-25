@@ -1,27 +1,71 @@
-<div id="root">
+<div style="overflow:scroll; height:450px;">
   <h3>
-    <strong>Objetivos del sistema </strong>
+    <strong>Objetivos del sistema: {{ object.name.upper }} </strong>
   </h3>
-    
-    <p>
-        Presentamos a las organizaciones y participantes clave en el desarrollo de <strong>{{ project.name.upper }}</strong>. 
-    </p>
-    
+  
+  <div class="container">
     {% if object_list %}
-      {% for obj in object_list %}
-        {{obj.title}}
-        {{obj.version}}
-        {{obj.authors}}
-        {{obj.fuente}}
-        {{obj.description}}
-        {{obj.importancia}}
-        {{obj.urgencia}}
-        {{obj.status}}
-        {{obj.estabilidad}}
-        {{obj.comments}}
-      {% endfor %}
+    <ol class="list-group list-group-numbered">
+        {% for obj in object_list %}
+        <li class="list-group-item d-flex justify-content-between align-items-start mb-2">
+          <div class="ms-2 me-auto">
+            {{ obj.objectiveId }}
+            <div class="fw-bold">{{obj.title}}</div>
+            <div class="flex-column">
+              <div>
+                <label><strong>Descripción:</strong></label>
+                {{obj.description}}
+              </div>
+              <div class="flex">
+                <label><strong>Autor(es):</strong></label>
+                <div class="flex-colum">
+                {% for author in obj.authors.all %}
+                <p class="m-0">{{author.name }}</p>
+                {% endfor %}
+                </div>
+              </div>
+              <div>
+                <label><strong>Fuente:</strong></label>
+                {{obj.fuente}}
+              </div>
+              <div class="row">
+                <div class="col-3">
+                  <label><strong>Importancia:</strong></label>
+                  <p>{{obj.importancia}}</p>
+                </div>
+                <div class="col-3">
+                  <label><strong>Urgencia:</strong></label>
+                  <p>{{obj.urgencia}}</p>
+                </div>
+                <div class="col-3">
+                  <label><strong>Estado:</strong></label>
+                  <p>{{obj.status}}</p>
+                </div>
+                <div class="col-3">
+                  <label><strong>Estabilidad:</strong></label>
+                  <p>{{obj.estabilidad}}</p>
+                </div>
+              </div>
+              <div>
+                <label><strong>Comentarios(Opcional):</strong></label>
+              {{obj.comments}}
+              </div>
+
+            </div>
+          </div>
+          <span class="badge text-bg-primary rounded-pill">version: {{obj.version}}</span>
+        </li>
+      
         
-    {% endif %}
+        
+        
+        {% endfor %}
+    </ol>
+      
+  {% endif %}
+  </div>
+  
+
 </div>
 
 

@@ -1,0 +1,17 @@
+<div id="root">
+    <div class="offcanvas-header">
+        <div class="offcanvas-header mt-5 mx-5">
+            <h5 class="offcanvas-title h2" id="offcanvasRightLabel">
+                Descripción del sistema actual: {{ object.project.name.upper }}
+            </h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="container p-2">
+            <p>
+                <p>{{ object.description|safe }}</p>
+            </p>
+        </div>
+    </div>
+</div>

@@ -9,14 +9,14 @@
     <h2>Mi Application</h2>
   
     <div class="d-flex flex-column">
-      <button type="button" class="btn" >Inicio</button>
+      <a type="button" class="btn" href="{% url "dashboard" %}">Inicio</a>
       <a type="button" class="btn" href="{% url "detail" pk=object.id %}">Dashboard</a>
       <span>Participantes</span>
       <button type="button" class="btn border-0" hx-get="{% url 'organizations' pk=object.id %}" hx-target="#main" hx-swap="outerHTML">organizaciones</button>
-      <button type="button" class="btn border-0" hx-get="{% url 'participants' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">personas</button>
+      <button type="button" class="btn border-0" hx-get="{% url 'participants' pk=object.id %}" hx-target="#main" hx-swap="outerHTML">personas</button>
       <span>Requisitos</span>
-      <button type="button" class="btn" hx-get="{% url 'requeriments' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Requisitos de sistema</button>
-      <button type="button" class="btn" hx-get="{% url 'objectives' pk=object.id %}" hx-target="#root" hx-swap="outerHTML">Objetivos del sistema</button>
+      <button type="button" class="btn" hx-get="{% url 'requeriments' pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Requisitos de sistema</button>
+      <button type="button" class="btn" hx-get="{% url 'objectives' pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Objetivos del sistema</button>
       <button type="button" class="btn border-0" hx-get="{% url "list_image" pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Imagenes</button>
       <button type="button" class="btn border-0" hx-get="{% url "delete_project" pk=object.id %}" hx-target="#main" hx-swap="outerHTML">Eliminar proyecto</button>
     </div>
@@ -54,6 +54,7 @@
         </li>
         <li>
             <button hx-get="{% url "new_objective" pk=object.id %}" hx-trigger="click"
+                data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
                 hx-swap="outerHTML" class="btn primary"
                 hx-target="#root">
                 Objetivo
@@ -90,7 +91,7 @@
     <div id="root"></div>
 </div>
 
-<div id="main">
+<div id="main" style="overflow:scroll; height:450px;">
     <div class="container p-3">
         <div class="row">
             <div class="col-md-6">
@@ -123,29 +124,52 @@
             <div class="d-flex">
                 <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">3</p>
                 <p class="mx-3">Logo de software 
-                    <input type="checkbox"
-                        {% for img in object.images.all %}
-                            {% if img.is_logo %}
-                                checked="true">
-                                <span style="cursor:pointer" hx-get="{% url "detail_image" pk=img.id %}" hx-target="#root" hx-swap="outerHTML"
-                                data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
-                                >ver</span>
+                    {% for img in object.images.all %}
+                        {% if img.is_logo %}
+                            <input type="checkbox"checked="True">
+                            <span style="cursor:pointer" hx-get="{% url "detail_image" pk=img.id %}" hx-target="#root" hx-swap="outerHTML"
+                            data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                            >ver</span>
                             {% endif %}
-                            >
+                        {% empty %}
+                            <span class="btn" style="cursor:pointer"
+                            data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                            hx-get="{% url "new_image" pk=object.id %}" hx-target="#root" hx-swap="outerHTML"
+                            >Subir logo</span>
                         {% endfor %}
                 </p>
 
             </div>
             <div class="d-flex">
                 <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">4</p>
-                <p class="mx-3">Descripción del sistema <input type="checkbox"></p>
-                <div class="flex-column">
-                </div>
+                <p class="mx-3">Descripción del sistema 
+                {% if object.software.description != none %}
+                    <input type="checkbox"
+                        data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                        hx-get="{% url "edit_description" pk=object.software.id %}" hx-target="#root" hx-swap="outerHTML"
+                        checked="True"
+                    >
+                    <span>Editar</span>
+                    {% endif %} 
+                </p>
             </div>
+
             <div class="d-flex">
                 <p style="width:32px;height:32px; border-radius:100%; border: 1px solid black;color:white;font-weight:600; background:black;" class="text-center">5</p>
-                <p class="mx-3">Objetivos del sistema <input type="checkbox"></p>
-                <div class="flex-column">
+                <p class="mx-3">Objetivos del sistema </p>
+                <div>
+                    {% if object.software.objectives.all %}
+                    <input type="checkbox" checked="True">
+                    <span hx-get="{% url "objectives" pk=object.id %}" hx-target="#root" hx-swap="outerHTML"
+                        data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                        style="cursor:pointer;"
+                    >Ver</span>
+                    {% else %}
+                    <span hx-get="{% url "new_objective" pk=object.id %}" hx-target="#root" hx-swap="outerHTML"
+                        data-bs-toggle="offcanvas" data-bs-target="#modalForm" aria-controls="modalForm"
+                        style="cursor:pointer;"
+                    >Agregar objetivo</span>
+                    {% endif %}
                 </div>
             </div>
             <div class="d-flex">

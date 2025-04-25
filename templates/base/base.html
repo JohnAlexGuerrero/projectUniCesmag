@@ -21,7 +21,9 @@
     <div class="row">
         <div class="col-sm-2">
             {% block sidebar %}
+                {% if request.user.is_authenticated %}
                 {% include "includes/sidebar.html" %}
+                {% endif %}
             {% endblock sidebar %}
         </div>
         <div class="col-sm-10">

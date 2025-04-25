@@ -16,13 +16,17 @@
     }
 </style>
 
-<div id="root">
+<div>
     <div class="container mt-5">
         <h1>Crear objetivo para {{ software }}</h1>
-        <form hx-post="{% url "new_objective" pk=object.id %}" hx-target="#root" hx-swap="outerHTML">
+        <form hx-post="{% url "new_objective" pk=object.id %}" hx-target="#root" hx-swap="outerHTML" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row row">
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="titulo">Objetivo</label>
+                        {{ form.objectiveId }}
+                    </div>
                     <div class="form-group">
                         <label for="titulo">Título</label>
                         {{ form.title }}
@@ -48,12 +52,12 @@
                 <div class="col-md-6" >
                     <div class="form-group" id="id_root">
                         <label for="autores">Autores participantes</label>
-                        <div class="author-input-group">
+                        <div class="author-input-group p-2" style="width:80%;height:200px;overflow:scroll;border:2px dashed rgb(126, 119, 119);">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4z"/>
                             </svg>
                             <div class="flex-column">
-                                <div class="border p-2" style="width:90%;height:120px;overflow:scroll;">
+                                <div class="" >
                                     {{ form.authors }}
                                 </div>
                                 <small class="form-text text-muted">Seleccione uno o varios autores.</small>
@@ -61,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label>Importancia</label><br>
                         {% for field in form.importancia %}
                             <div class="form-check form-check-inline">
@@ -104,18 +108,9 @@
                 </div>
             </div>
 
+            <input type="text" value="{{ software.id }}" style="display:none;" name="software">
 
-            <div class="form-row">
-     
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="software">Software</label>
-                        <input type="text" value="{{ software.id }}" style="display:block;" name="software">
-                    </div>
-                </div>
-            </div>
-
-            <input type="submit" class="btn border" value="Crear objetivo" >
+            <input type="submit" class="btn border btn-primary" value="Crear objetivo" >
         </form>
     </div>
 </div>

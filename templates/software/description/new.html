@@ -1,0 +1,16 @@
+<div id="root" class="container p-3">
+    <h1>Descripcion del sistema actual: {{ object.project.name.upper }}</h1>
+    <div class="offcanvas-body">
+        <div class="container p-2">
+            <p>La descripción del sistema actual, permite a los lectores entender, comunicar y tener una visión clara del funcionamiento del sistema existente.</p>
+            <form hx-post="{% url "edit_description" pk=object.id %}" hx-target="#root" hx-swap="outerHTML" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+
+                {{ form }}
+                
+                <input type="submit" value="Guardar" class="btn btn-primary border p-2 mt-2">
+            </form>
+        </div>
+    </div>
+</div>
